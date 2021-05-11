@@ -1,0 +1,71 @@
+SOLID розшифровується як:
+
+     S: Single Responsibility Principle (Принцип єдиної відповідальності).
+     O: Open-Closed Principle (Принцип відкритості-закритості).
+     L: Liskov Substitution Principle (принцип підстановки Лісков).
+     I: Interface Segregation Principle (Принцип поділу інтерфейсу).
+     D: Dependency Inversion Principle (Принцип інверсії залежностей). 
+
+
+Розглянемо: Open-Closed Principle (Принцип відкритості-закритості).
+
+Ідея принципу: Розробка стійкого до внесення змін додатка. 
+
+
+    class Auto {   					
+	constructor(public model: string) { }
+	getCarModel() { }
+    }
+
+    const shop: Array<Auto> = [       
+	new Auto('toyota'),
+        new Auto('volkswagen'),
+	new Auto('chevrolet')
+    ];
+
+    const getPrice = (auto: Array<Auto>): string | void => {    
+	for (let i = 0; i <auto.length; i++) {
+	    switch (auto[i].model) {
+		case 'toyota': return '30 000$';
+		case 'volkswagen': return '50 000$';
+		case 'chevrolet': return '75 000$';
+		default: return 'No Auto Price';
+	     }
+	 }
+     }
+
+
+    get Price(shop)
+
+    abstract class CarPrice {              
+	abstract getPrice(): string;       
+    }
+    class toyota extends CarPrice {
+	getPrice() {
+	    return '30 000$'
+	}
+    }
+    class volkswagen extends CarPrice {
+	getPrice() {
+	    return '50 000$'
+	}
+    }
+    class chevrolet extends CarPrice {
+	getPrice() {
+	    return '75 000$'
+	}
+    }
+
+    const shop: Array<CarPrice> = [     
+	new toyota(),
+	new volkswagen(),
+	new chevrolet(),
+    ];
+
+    const getPrice = (auto: Array<CarPrice>): string | void => {
+	for (let is = 0; i < auto.length; i++) {
+	    auto[i].getPrice();
+	}
+    }
+
+    getPrice(shop);

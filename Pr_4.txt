@@ -1,0 +1,88 @@
+SOLID розшифровується як:
+
+     S: Single Responsibility Principle (Принцип єдиної відповідальності).
+     O: Open-Closed Principle (Принцип відкритості-закритості).
+     L: Liskov Substitution Principle (принцип підстановки Лісков).
+     I: Interface Segregation Principle (Принцип поділу інтерфейсу).
+     D: Dependency Inversion Principle (Принцип інверсії залежностей). 
+
+
+Розглянемо: Single Responsibility Principle.
+
+Ідея принципу:Кожен об'єкт повинен мати один обов'язок, і цей обов'язок повинен бути повністю інкапсульованій в клас. 
+
+//Наприклад, у нас є кілька фігур і ми хотіли б підсумувати все площі. 
+
+class Circle {
+     public $radius;
+ 
+     public function __construct($radius) {
+         $this->radius = $radius;
+     }
+}
+ 
+class Square {
+     public $length;
+ 
+     public function __construct($length) {
+         $this->length = $length;
+     }
+}
+
+//По-перше, ми створюємо класи для наших фігур і в конструкторах встановлюємо потрібні параметри. Потім ми створюємо клас AreaCalculator і описуємо в ньому логіку підсумовування площ фігур. 
+
+class AreaCalculator {
+ 
+     protected $shapes;
+ 
+     public function __construct($shapes = array()) {
+         $this->shapes = $shapes;
+     }
+ 
+     public function sum() {
+         // logic to sum the areas
+     }
+ 
+     public function output() {
+         return implode('', array(
+         "<h1>",
+         "Sum of the areas of provided shapes: ",
+         $this->sum(),
+         "</h1>"
+         ));
+     }
+}
+
+//Для використання класу AreaCalculator ми створюємо простий об'єкт, передаємо в нього масив з фігурами і виводимо результат обчислень. 
+
+$shapes = array(
+     new Circle(2),
+     new Square(5),
+     new Square(6)
+);
+ 
+$areas = new AreaCalculator($shapes);
+ 
+echo $areas->output();
+
+/*Проблема з методом виведення в тому, що клас AreaCalculator реалізує всю логіку виведення в ньому. Але що буде, якщо користувач захоче вивести дані в форматі JSON?
+
+Вся логіка по розрахунку і висновку зберігається в одному класі - це те, з чим бореться принцип SPR. Клас AreaCalculator повинен відповідати за обчислення суми площ (про що говорить назва класу), але не за виведення результатів в форматі HTML.
+
+Щоб повною мірою реалізувати принцип, нам потрібно створити інший клас SumCalculatorOutputter, який буде займатися виведенням результатів. */
+
+//Клас SumCalculatorOutputter буде працювати наступним чином: 
+
+$shapes = array(
+     new Circle(2),
+     new Square(5),
+     new Square(6)
+);
+ 
+$areas = new AreaCalculator($shapes);
+$output = new SumCalculatorOutputter($areas);
+ 
+echo $output->JSON();
+echo $output->HAML();
+echo $output->HTML();
+echo $output->JADE();
